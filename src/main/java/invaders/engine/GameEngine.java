@@ -28,6 +28,9 @@ public class GameEngine {
 	private boolean left;
 	private boolean right;
 
+	private double windowWidth;
+	private double windowHeight;
+
 	public GameEngine(String configPath) {
 		// read the config here
 		gameobjects = new ArrayList<GameObject>();
@@ -46,6 +49,12 @@ public class GameEngine {
 	
 			player = new Player(new Vector2D(x, y));
 			renderables.add(player);
+
+			// Read the window size
+			JSONObject gameConfig = (JSONObject) jsonObject.get("Game");
+			JSONObject size = (JSONObject) gameConfig.get("size");
+			windowWidth = ((Long) size.get("x")).doubleValue();
+			windowHeight = ((Long) size.get("y")).doubleValue();
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
 		}
@@ -117,5 +126,13 @@ public class GameEngine {
 		if(right){
 			player.right();
 		}
+	}
+
+	public double getWindowWidth() {
+		return windowWidth;
+	}
+	
+	public double getWindowHeight() {
+		return windowHeight;
 	}
 }
