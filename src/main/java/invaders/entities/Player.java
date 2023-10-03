@@ -20,9 +20,12 @@ public class Player implements Moveable, Damagable, Renderable {
     private final double height = 30;
     private final Image image;
 
-    public Player(Vector2D position){
+    private ProjectileFactory projectileFactory;
+
+    public Player(Vector2D position, ProjectileFactory factory){
         this.image = new Image(new File("src/main/resources/player.png").toURI().toString(), width, height, true, true);
         this.position = position;
+        this.projectileFactory = factory;
     }
 
     @Override
@@ -60,9 +63,9 @@ public class Player implements Moveable, Damagable, Renderable {
         this.position.setX(this.position.getX() + 1);
     }
 
-    public Projectile shoot(){
-        Vector2D projectilePosition = new Vector2D(this.position.getX() + width/2, this.position.getY() - 10);  // Adjust the offset as needed
-        return new Projectile(projectilePosition);
+    public Projectile shoot() {
+        Vector2D projectilePosition = new Vector2D(this.position.getX() + width/2, this.position.getY() - 10);
+        return projectileFactory.createProjectile(projectilePosition);
     }
     
 

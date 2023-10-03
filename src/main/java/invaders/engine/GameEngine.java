@@ -5,6 +5,7 @@ import java.util.List;
 
 import invaders.GameObject;
 import invaders.entities.Player;
+import invaders.entities.PlayerProjectileFactory;
 import invaders.entities.Projectile;
 import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
@@ -51,7 +52,8 @@ public class GameEngine {
 			double x = ((Long) position.get("x")).doubleValue();
 			double y = ((Long) position.get("y")).doubleValue();
 	
-			player = new Player(new Vector2D(x, y));
+			// Instantiate the Player with the PlayerProjectileFactory
+			player = new Player(new Vector2D(x, y), new PlayerProjectileFactory());
 			renderables.add(player);
 
 			// Read the window size
