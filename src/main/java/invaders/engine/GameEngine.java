@@ -5,6 +5,7 @@ import java.util.List;
 
 import invaders.GameObject;
 import invaders.entities.Bunker;
+import invaders.entities.Enemy;
 import invaders.entities.Player;
 import invaders.entities.PlayerProjectileFactory;
 import invaders.entities.Projectile;
@@ -80,6 +81,23 @@ public class GameEngine {
 				gameobjects.add(bunker);
 				renderables.add(bunker); // Assuming Bunker implements Renderable
 			}
+
+		// Read and instantiate enemies
+		JSONArray enemiesConfig = (JSONArray) jsonObject.get("Enemies");
+		if (enemiesConfig != null) {
+			for (Object obj : enemiesConfig) {
+				JSONObject enemyConfig = (JSONObject) obj;
+				JSONObject enemyPosition = (JSONObject) enemyConfig.get("position");
+
+				double enemyX = ((Long) enemyPosition.get("x")).doubleValue();
+				double enemyY = ((Long) enemyPosition.get("y")).doubleValue();
+
+				Enemy enemy = new Enemy(new Vector2D(enemyX, enemyY));
+				gameobjects.add(enemy);
+				renderables.add(enemy); // Assuming Enemy implements Renderable
+			}
+		}
+
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
 		}
