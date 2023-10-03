@@ -1,5 +1,6 @@
 package invaders.entities;
 
+import invaders.physics.BoxCollider;
 import invaders.physics.Vector2D;
 import invaders.rendering.Renderable;
 import javafx.scene.image.Image;
@@ -12,9 +13,12 @@ public class Projectile implements Renderable {
     private final double height = 10;  // Adjust as needed
     private final Image image;
 
+    private final BoxCollider collider;
+
     public Projectile(Vector2D position){
         this.image = new Image(new File("src/main/resources/projectile.png").toURI().toString(), width, height, true, true);
         this.position = position;
+        this.collider = new BoxCollider(width, height, position);
     }
 
     public void moveUp() {
@@ -44,5 +48,9 @@ public class Projectile implements Renderable {
     @Override
     public Layer getLayer() {
         return Layer.FOREGROUND;
+    }
+
+    public BoxCollider getCollider() {
+        return collider;
     }
 }

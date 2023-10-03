@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import invaders.GameObject;
+import invaders.entities.Bunker;
 import invaders.entities.Player;
 import invaders.entities.PlayerProjectileFactory;
 import invaders.entities.Projectile;
@@ -11,6 +12,7 @@ import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
 import invaders.rendering.Renderable;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -61,6 +63,23 @@ public class GameEngine {
 			JSONObject size = (JSONObject) gameConfig.get("size");
 			windowWidth = ((Long) size.get("x")).doubleValue();
 			windowHeight = ((Long) size.get("y")).doubleValue();
+
+			// Read and instantiate bunkers
+			JSONArray bunkersConfig = (JSONArray) jsonObject.get("Bunkers");
+			for (Object obj : bunkersConfig) {
+				JSONObject bunkerConfig = (JSONObject) obj;
+				JSONObject bunkerPosition = (JSONObject) bunkerConfig.get("position");
+				JSONObject bunkerSize = (JSONObject) bunkerConfig.get("size");
+
+				double bunkerX = ((Long) bunkerPosition.get("x")).doubleValue();
+				double bunkerY = ((Long) bunkerPosition.get("y")).doubleValue();
+				double bunkerWidth = ((Long) bunkerSize.get("x")).doubleValue();
+				double bunkerHeight = ((Long) bunkerSize.get("y")).doubleValue();
+
+				Bunker bunker = new Bunker(new Vector2D(bunkerX, bunkerY), new Vector2D(bunkerWidth, bunkerHeight));
+				gameobjects.add(bunker);
+				renderables.add(bunker); // Assuming Bunker implements Renderable
+			}
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
 		}
@@ -104,6 +123,25 @@ public class GameEngine {
 
 		projectiles.removeIf(projectile -> projectile.getPosition().getY() <= 0);
 		renderables.removeIf(renderable -> (renderable instanceof Projectile) && !projectiles.contains(renderable));
+
+		// Check for collisions between projectiles and bunkers
+		List<Projectile> projectilesToRemove = new ArrayList<>();
+		for (Projectile projectile : projectiles) {
+			for (GameObject gameObject : gameobjects) {
+				if (gameObject instanceof Bunker) {
+					Bunker bunker = (Bunker) gameObject;
+					if (projectile.getCollider().isColliding(bunker.getCollider())) {
+						bunker.takeDamage(1);  // Assuming 1 damage per projectile
+						projectilesToRemove.add(projectile);
+					}
+				}
+			}
+		}
+
+		// Remove collided projectiles
+		projectiles.removeAll(projectilesToRemove);
+		renderables.removeAll(projectilesToRemove);
+
 	}
 
 	public List<Renderable> getRenderables(){
