@@ -60,9 +60,11 @@ public class Player implements Moveable, Damagable, Renderable {
         this.position.setX(this.position.getX() + 1);
     }
 
-    public void shoot(){
-        // todo
+    public Projectile shoot(){
+        Vector2D projectilePosition = new Vector2D(this.position.getX() + width/2, this.position.getY() - 10);  // Adjust the offset as needed
+        return new Projectile(projectilePosition);
     }
+    
 
     @Override
     public Image getImage() {

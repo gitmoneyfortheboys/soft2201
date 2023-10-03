@@ -77,6 +77,19 @@ public class GameWindow {
             }
         }
         entityViews.removeIf(EntityView::isMarkedForDelete);
+
+        for (EntityView view : entityViews) {
+            boolean found = false;
+            for (Renderable entity : renderables) {
+                if (view.matchesEntity(entity)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                view.markForDelete();
+            }
+        }
     }
 
 	public Scene getScene() {

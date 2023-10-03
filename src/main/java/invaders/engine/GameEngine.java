@@ -5,6 +5,7 @@ import java.util.List;
 
 import invaders.GameObject;
 import invaders.entities.Player;
+import invaders.entities.Projectile;
 import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
 import invaders.rendering.Renderable;
@@ -30,6 +31,9 @@ public class GameEngine {
 
 	private double windowWidth;
 	private double windowHeight;
+
+	private List<Projectile> projectiles = new ArrayList<>();
+
 
 	public GameEngine(String configPath) {
 		// read the config here
@@ -91,6 +95,13 @@ public class GameEngine {
 				ro.getPosition().setY(1);
 			}
 		}
+
+		for (Projectile projectile : projectiles) {
+			projectile.moveUp();
+		}
+
+		projectiles.removeIf(projectile -> projectile.getPosition().getY() <= 0);
+		renderables.removeIf(renderable -> (renderable instanceof Projectile) && !projectiles.contains(renderable));
 	}
 
 	public List<Renderable> getRenderables(){
@@ -114,9 +125,12 @@ public class GameEngine {
 	}
 
 	public boolean shootPressed(){
-		player.shoot();
+		Projectile projectile = player.shoot();
+		projectiles.add(projectile);
+		renderables.add(projectile);
 		return true;
 	}
+	
 
 	private void movePlayer(){
 		if(left){
