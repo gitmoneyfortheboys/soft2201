@@ -131,7 +131,6 @@ public class GameEngine {
 				if (gameObject instanceof Bunker) {
 					Bunker bunker = (Bunker) gameObject;
 					if (projectile.getCollider().isColliding(bunker.getCollider())) {
-						System.out.println("Collision detected!"); // Debug log
 						bunker.takeDamage(1);  // Assuming 1 damage per projectile
 						projectilesToRemove.add(projectile);
 					}

@@ -25,12 +25,15 @@ public class Bunker implements GameObject, Damagable, Renderable, EntityView {
 
     private final BoxCollider collider;
 
+    private BunkerState state;
+
     public Bunker(Vector2D position, Vector2D size) {
         this.position = position;
         this.size = size;
         this.hitCount = 0;
         this.image = new Image(new File("src/main/resources/bunker.png").toURI().toString());
         this.collider = new BoxCollider(size.getX(), size.getY(), position);
+        this.state = new GreenState(); // Bunker starts in the Green state
     }
 
     @Override
@@ -47,11 +50,7 @@ public class Bunker implements GameObject, Damagable, Renderable, EntityView {
 
     @Override
     public void takeDamage(double amount) {
-        hitCount++;
-
-        if (hitCount >= MAX_HITS) {
-            markForDelete();
-        }
+        state.takeDamage(this);
     }
 
     @Override
@@ -119,5 +118,13 @@ public class Bunker implements GameObject, Damagable, Renderable, EntityView {
 
     public BoxCollider getCollider() {
         return collider;
+    }
+
+    public void setState(BunkerState state) {
+        this.state = state;
+    }
+
+    public String getColor() {
+        return state.getColor();
     }
 }
