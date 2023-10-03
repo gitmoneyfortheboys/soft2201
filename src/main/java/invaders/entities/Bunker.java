@@ -6,10 +6,12 @@ import invaders.physics.BoxCollider;
 import invaders.physics.Vector2D;
 import invaders.rendering.Renderable;
 import javafx.scene.Node;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
+
 
 public class Bunker implements GameObject, Damagable, Renderable, EntityView {
 
@@ -27,6 +29,8 @@ public class Bunker implements GameObject, Damagable, Renderable, EntityView {
 
     private BunkerState state;
 
+    private final ColorAdjust colorAdjust;
+
     public Bunker(Vector2D position, Vector2D size) {
         this.position = position;
         this.size = size;
@@ -34,6 +38,7 @@ public class Bunker implements GameObject, Damagable, Renderable, EntityView {
         this.image = new Image(new File("src/main/resources/bunker.png").toURI().toString());
         this.collider = new BoxCollider(size.getX(), size.getY(), position);
         this.state = new GreenState(); // Bunker starts in the Green state
+        this.colorAdjust = new ColorAdjust();
     }
 
     @Override
@@ -51,7 +56,9 @@ public class Bunker implements GameObject, Damagable, Renderable, EntityView {
     @Override
     public void takeDamage(double amount) {
         state.takeDamage(this);
+        state.adjustColor(this);
     }
+    
 
     @Override
     public double getHealth() {
@@ -106,10 +113,11 @@ public class Bunker implements GameObject, Damagable, Renderable, EntityView {
 
     @Override
     public Node getNode() {
-        // Return the graphical representation (Node) of the bunker.
-        // This could be an ImageView or any other JavaFX Node.
-        return new ImageView(this.image); // Assuming you're using an ImageView for rendering
+        ImageView imageView = new ImageView(this.image);
+        imageView.setEffect(colorAdjust);
+        return imageView;
     }
+    
 
     @Override
     public boolean isMarkedForDelete() {
@@ -127,4 +135,14 @@ public class Bunker implements GameObject, Damagable, Renderable, EntityView {
     public String getColor() {
         return state.getColor();
     }
+
+    public ColorAdjust getColorAdjust() {
+        return colorAdjust;
+    }
+
+    public void adjustColor() {
+        state.adjustColor(this);
+    }
+    
+    
 }
