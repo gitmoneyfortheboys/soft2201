@@ -132,6 +132,7 @@ public class GameEngine {
 					Bunker bunker = (Bunker) gameObject;
 					if (projectile.getCollider().isColliding(bunker.getCollider())) {
 						bunker.takeDamage(1);  // Assuming 1 damage per projectile
+						bunker.getColor();
 						projectilesToRemove.add(projectile);
 					}
 				}
