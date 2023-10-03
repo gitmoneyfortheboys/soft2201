@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import invaders.entities.EntityViewImpl;
 import invaders.entities.SpaceBackground;
 import javafx.util.Duration;
-
+import invaders.entities.Bunker;
 import invaders.entities.EntityView;
 import invaders.rendering.Renderable;
 import javafx.animation.KeyFrame;
@@ -56,6 +56,9 @@ public class GameWindow {
 
         List<Renderable> renderables = model.getRenderables();
         for (Renderable entity : renderables) {
+            if(entity instanceof Bunker && ((Bunker) entity).isMarkedForDelete()) {
+                continue; // Skip rendering bunkers that are marked for deletion
+            }
             boolean notFound = true;
             for (EntityView view : entityViews) {
                 if (view.matchesEntity(entity)) {

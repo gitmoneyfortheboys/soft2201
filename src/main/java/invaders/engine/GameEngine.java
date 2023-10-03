@@ -131,6 +131,7 @@ public class GameEngine {
 				if (gameObject instanceof Bunker) {
 					Bunker bunker = (Bunker) gameObject;
 					if (projectile.getCollider().isColliding(bunker.getCollider())) {
+						System.out.println("Collision detected!"); // Debug log
 						bunker.takeDamage(1);  // Assuming 1 damage per projectile
 						projectilesToRemove.add(projectile);
 					}
@@ -141,6 +142,11 @@ public class GameEngine {
 		// Remove collided projectiles
 		projectiles.removeAll(projectilesToRemove);
 		renderables.removeAll(projectilesToRemove);
+
+		// Remove bunkers that are marked for deletion
+		gameobjects.removeIf(gameObject -> (gameObject instanceof Bunker) && ((Bunker) gameObject).isMarkedForDelete());
+		renderables.removeIf(renderable -> (renderable instanceof Bunker) && ((Bunker) renderable).isMarkedForDelete());
+
 
 	}
 
