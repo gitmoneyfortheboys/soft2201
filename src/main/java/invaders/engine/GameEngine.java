@@ -84,7 +84,7 @@ public class GameEngine {
 			}
 
 				Enemy enemy = new Enemy.EnemyBuilder()
-				.setPosition(new Vector2D(100, 100))
+				.setPosition(new Vector2D(100, 200))
 				.setImage("/enemy.png", 35, 35)  
 				.build();
 			
@@ -179,6 +179,26 @@ public class GameEngine {
 		renderables.removeAll(projectilesToRemove);
 		gameobjects.removeAll(enemiesToRemove);
 		renderables.removeAll(enemiesToRemove);
+
+
+		// Check for collisions between bunkers and enemies
+		for (GameObject gameObject : gameobjects) {
+			if (gameObject instanceof Bunker) {
+				Bunker bunker = (Bunker) gameObject;
+				for (GameObject enemyObject : gameobjects) {
+					if (enemyObject instanceof Enemy) {
+						Enemy enemy = (Enemy) enemyObject;
+						if (bunker.getCollider().isColliding(enemy.getCollider())) {
+							bunker.markForDelete();  // Mark the bunker for deletion
+						}
+					}
+				}
+			}
+		}
+
+		// Remove bunkers that are marked for deletion
+		gameobjects.removeIf(gameObject -> (gameObject instanceof Bunker) && ((Bunker) gameObject).isMarkedForDelete());
+		renderables.removeIf(renderable -> (renderable instanceof Bunker) && ((Bunker) renderable).isMarkedForDelete());
 
 	}
 
