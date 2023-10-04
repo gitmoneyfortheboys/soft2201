@@ -161,6 +161,24 @@ public class GameEngine {
 		gameobjects.removeIf(gameObject -> (gameObject instanceof Bunker) && ((Bunker) gameObject).isMarkedForDelete());
 		renderables.removeIf(renderable -> (renderable instanceof Bunker) && ((Bunker) renderable).isMarkedForDelete());
 
+		// Check for collisions between projectiles and enemies
+		List<Enemy> enemiesToRemove = new ArrayList<>();
+		for (Projectile projectile : projectiles) {
+			for (GameObject gameObject : gameobjects) {
+				if (gameObject instanceof Enemy) {
+					Enemy enemy = (Enemy) gameObject;
+					if (projectile.getCollider().isColliding(enemy.getCollider())) {
+						enemiesToRemove.add(enemy);
+						projectilesToRemove.add(projectile);
+					}
+				}
+			}
+		}
+
+		projectiles.removeAll(projectilesToRemove);
+		renderables.removeAll(projectilesToRemove);
+		gameobjects.removeAll(enemiesToRemove);
+		renderables.removeAll(enemiesToRemove);
 
 	}
 

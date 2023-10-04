@@ -4,10 +4,12 @@ import invaders.GameObject;
 import invaders.physics.Vector2D;
 import invaders.rendering.Renderable;
 import javafx.scene.image.Image;
+import invaders.physics.BoxCollider;
 
 public class Enemy implements Renderable, GameObject {
     private Vector2D position;
     private Image image;
+    private BoxCollider collider;  // Add this line
 
     private Enemy() {
         // Private constructor to ensure instances are created only through the builder
@@ -48,6 +50,13 @@ public class Enemy implements Renderable, GameObject {
     @Override
     public void update() {
         // Update logic for the enemy
+    }
+
+    public BoxCollider getCollider() {
+        if (collider == null) {
+            collider = new BoxCollider(getWidth(), getHeight(), getPosition());
+        }
+        return collider;
     }
 
     public static class EnemyBuilder {
