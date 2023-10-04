@@ -83,15 +83,26 @@ public class GameEngine {
 				renderables.add(bunker); // Assuming Bunker implements Renderable
 			}
 
+			// Inside the GameEngine constructor, after reading bunkers:
+
+			JSONArray enemiesConfig = (JSONArray) jsonObject.get("Enemies");
+			for (Object obj : enemiesConfig) {
+				JSONObject enemyConfig = (JSONObject) obj;
+				JSONObject enemyPosition = (JSONObject) enemyConfig.get("position");
+				
+				double enemyX = ((Long) enemyPosition.get("x")).doubleValue();
+				double enemyY = ((Long) enemyPosition.get("y")).doubleValue();
+				
 				Enemy enemy = new Enemy.EnemyBuilder()
-				.setPosition(new Vector2D(100, 200))
-				.setImage("/enemy.png", 35, 35)  
+				.setPosition(new Vector2D(enemyX, enemyY))
+				.setImage("/enemy.png", 35, 35)  // Updated path
 				.build();
 			
 
-
 				gameobjects.add(enemy);
 				renderables.add(enemy);
+			}
+
 
 
 		} catch (IOException | ParseException e) {
