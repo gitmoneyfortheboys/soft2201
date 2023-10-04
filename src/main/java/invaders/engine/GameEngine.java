@@ -5,12 +5,14 @@ import java.util.List;
 
 import invaders.GameObject;
 import invaders.entities.Bunker;
+import invaders.entities.Enemy;
 import invaders.entities.Player;
 import invaders.entities.PlayerProjectileFactory;
 import invaders.entities.Projectile;
 import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
 import invaders.rendering.Renderable;
+import javafx.scene.image.Image;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -80,6 +82,17 @@ public class GameEngine {
 				gameobjects.add(bunker);
 				renderables.add(bunker); // Assuming Bunker implements Renderable
 			}
+
+				Enemy enemy = new Enemy.EnemyBuilder()
+				.setPosition(new Vector2D(100, 100))
+				.setImage("/enemy.png", 35, 35)  
+				.build();
+			
+
+
+				gameobjects.add(enemy);
+				renderables.add(enemy);
+
 
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
