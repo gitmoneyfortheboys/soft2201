@@ -6,10 +6,14 @@ import java.util.List;
 import invaders.GameObject;
 import invaders.entities.Bunker;
 import invaders.entities.Enemy;
+import invaders.entities.EnemyProjectileFactory;
+import invaders.entities.FastStraightBehavior;
 import invaders.entities.Player;
 import invaders.entities.PlayerProjectileFactory;
 import invaders.entities.Projectile;
 import invaders.entities.Projectile.ProjectileType;
+import invaders.entities.ProjectileBehavior;
+import invaders.entities.SlowStraightBehavior;
 import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
 import invaders.rendering.Renderable;
@@ -58,7 +62,7 @@ public class GameEngine {
 			double y = ((Long) position.get("y")).doubleValue();
 	
 			// Instantiate the Player with the PlayerProjectileFactory
-			player = new Player(new Vector2D(x, y), new PlayerProjectileFactory());
+			player = new Player(new Vector2D(x, y), new PlayerProjectileFactory(new FastStraightBehavior()));
 			renderables.add(player);
 
 			// Read the window size
@@ -94,10 +98,27 @@ public class GameEngine {
 				double enemyX = ((Long) enemyPosition.get("x")).doubleValue();
 				double enemyY = ((Long) enemyPosition.get("y")).doubleValue();
 				
+				String projectileType = (String) enemyConfig.get("projectile");
+				ProjectileBehavior behavior;
+				switch (projectileType) {
+					case "fast_straight":
+						behavior = new FastStraightBehavior();
+						break;
+					case "slow_straight":
+						behavior = new SlowStraightBehavior();
+						break;
+					default:
+						throw new IllegalArgumentException("Unknown projectile behavior: " + projectileType);
+				}
+
+				EnemyProjectileFactory enemyProjectileFactory = new EnemyProjectileFactory(behavior);
 				Enemy enemy = new Enemy.EnemyBuilder()
 				.setPosition(new Vector2D(enemyX, enemyY))
-				.setImage("/enemy.png", 35, 35)  // Updated path
+				.setImage("/enemy.png", 35, 35)
+				.setProjectileFactory(enemyProjectileFactory)
 				.build();
+			
+
 			
 
 				gameobjects.add(enemy);

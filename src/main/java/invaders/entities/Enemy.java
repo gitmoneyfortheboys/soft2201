@@ -10,12 +10,12 @@ public class Enemy implements Renderable, GameObject {
     private Vector2D position;
     private Image image;
     private BoxCollider collider;  // Add this line
+    private ProjectileFactory projectileFactory;
 
-    private EnemyProjectileFactory projectileFactory = new EnemyProjectileFactory();
-
-    private Enemy() {
-        // Private constructor to ensure instances are created only through the builder
+    private Enemy(ProjectileFactory projectileFactory) {
+        this.projectileFactory = projectileFactory;
     }
+    
 
     @Override
     public Image getImage() {
@@ -68,6 +68,7 @@ public class Enemy implements Renderable, GameObject {
     }
 
     public static class EnemyBuilder {
+        private ProjectileFactory projectileFactory;
         private Vector2D position;
         private Image image;
 
@@ -82,10 +83,16 @@ public class Enemy implements Renderable, GameObject {
         }
         
         public Enemy build() {
-            Enemy enemy = new Enemy();
+            Enemy enemy = new Enemy(this.projectileFactory);
             enemy.position = this.position;
             enemy.image = this.image;
             return enemy;
+        }
+        
+
+        public EnemyBuilder setProjectileFactory(ProjectileFactory projectileFactory) {
+            this.projectileFactory = projectileFactory;
+            return this;
         }
     }
 }

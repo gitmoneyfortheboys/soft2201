@@ -2,6 +2,12 @@ package invaders.entities;
 
 import invaders.physics.Vector2D;
 
-abstract class ProjectileFactory {
+public abstract class ProjectileFactory {
+    protected ProjectileBehavior behavior;
+
+    public ProjectileFactory(ProjectileBehavior behavior) {
+        this.behavior = behavior;
+    }
+
     public abstract Projectile createProjectile(Vector2D position);
 }

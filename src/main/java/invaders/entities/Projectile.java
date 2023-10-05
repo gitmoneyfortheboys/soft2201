@@ -17,17 +17,24 @@ public class Projectile implements Renderable {
 
     private final ProjectileType type;
 
+    private final ProjectileBehavior behavior;
+
     public enum ProjectileType {
     PLAYER,
     ENEMY
 }
 
 
-    public Projectile(Vector2D position, ProjectileType type){
+    public Projectile(Vector2D position, ProjectileType type, ProjectileBehavior behavior){
         this.image = new Image(new File("src/main/resources/projectile.png").toURI().toString(), width, height, true, true);
         this.position = position;
         this.collider = new BoxCollider(width, height, position);
         this.type = type;
+        this.behavior = behavior;
+    }
+
+    public void move() {
+        behavior.move(this);
     }
 
     public ProjectileType getType() {
