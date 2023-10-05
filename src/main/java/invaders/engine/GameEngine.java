@@ -151,7 +151,12 @@ public class GameEngine {
 			}
 		}
 
-		projectiles.removeIf(projectile -> projectile.getPosition().getY() <= 0);
+			projectiles.removeIf(projectile -> 
+			(projectile.getType() == ProjectileType.PLAYER && projectile.getPosition().getY() <= 0) ||
+			(projectile.getType() == ProjectileType.ENEMY && projectile.getPosition().getY() >= windowHeight - projectile.getHeight())
+		);
+	
+
 		renderables.removeIf(renderable -> (renderable instanceof Projectile) && !projectiles.contains(renderable));
 
 		// Make enemies shoot periodically
