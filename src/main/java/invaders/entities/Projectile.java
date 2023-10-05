@@ -15,10 +15,23 @@ public class Projectile implements Renderable {
 
     private final BoxCollider collider;
 
-    public Projectile(Vector2D position){
+    private final ProjectileType type;
+
+    public enum ProjectileType {
+    PLAYER,
+    ENEMY
+}
+
+
+    public Projectile(Vector2D position, ProjectileType type){
         this.image = new Image(new File("src/main/resources/projectile.png").toURI().toString(), width, height, true, true);
         this.position = position;
         this.collider = new BoxCollider(width, height, position);
+        this.type = type;
+    }
+
+    public ProjectileType getType() {
+        return type;
     }
 
     public void moveUp() {

@@ -9,6 +9,7 @@ import invaders.entities.Enemy;
 import invaders.entities.Player;
 import invaders.entities.PlayerProjectileFactory;
 import invaders.entities.Projectile;
+import invaders.entities.Projectile.ProjectileType;
 import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
 import invaders.rendering.Renderable;
@@ -189,12 +190,14 @@ public class GameEngine {
 		// Check for collisions between projectiles and enemies
 		List<Enemy> enemiesToRemove = new ArrayList<>();
 		for (Projectile projectile : projectiles) {
-			for (GameObject gameObject : gameobjects) {
-				if (gameObject instanceof Enemy) {
-					Enemy enemy = (Enemy) gameObject;
-					if (projectile.getCollider().isColliding(enemy.getCollider())) {
-						enemiesToRemove.add(enemy);
-						projectilesToRemove.add(projectile);
+			if (projectile.getType() == ProjectileType.PLAYER) {
+				for (GameObject gameObject : gameobjects) {
+					if (gameObject instanceof Enemy) {
+						Enemy enemy = (Enemy) gameObject;
+						if (projectile.getCollider().isColliding(enemy.getCollider())) {
+							enemiesToRemove.add(enemy);
+							projectilesToRemove.add(projectile);
+						}
 					}
 				}
 			}
