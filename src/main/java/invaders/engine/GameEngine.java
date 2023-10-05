@@ -43,6 +43,10 @@ public class GameEngine {
 	private double windowHeight;
 
 	private List<Projectile> projectiles = new ArrayList<>();
+
+	private boolean movingRight = true;
+	private double enemySpeed = 1.0;
+	private double enemyDescend = 10.0;
 	
 
 
@@ -145,6 +149,42 @@ public class GameEngine {
 		for(GameObject go: gameobjects){
 			go.update();
 		}
+
+		    // Move the enemies
+			for (GameObject go : gameobjects) {
+				if (go instanceof Enemy) {
+					Enemy enemy = (Enemy) go;
+					if (movingRight) {
+						enemy.getPosition().setX(enemy.getPosition().getX() + enemySpeed);
+					} else {
+						enemy.getPosition().setX(enemy.getPosition().getX() - enemySpeed);
+					}
+				}
+			}
+		
+			// Check if any enemy has reached the edge
+			for (GameObject go : gameobjects) {
+				if (go instanceof Enemy) {
+					Enemy enemy = (Enemy) go;
+					if (movingRight && enemy.getPosition().getX() + enemy.getWidth() >= windowWidth) {
+						movingRight = false;
+						for (GameObject innerGo : gameobjects) {
+							if (innerGo instanceof Enemy) {
+								Enemy innerEnemy = (Enemy) innerGo;
+								innerEnemy.getPosition().setY(innerEnemy.getPosition().getY() + enemyDescend);
+							}
+						}
+					} else if (!movingRight && enemy.getPosition().getX() <= 0) {
+						movingRight = true;
+						for (GameObject innerGo : gameobjects) {
+							if (innerGo instanceof Enemy) {
+								Enemy innerEnemy = (Enemy) innerGo;
+								innerEnemy.getPosition().setY(innerEnemy.getPosition().getY() + enemyDescend);
+							}
+						}
+					}
+				}
+			}
 
 		// ensure that renderable foreground objects don't go off-screen
 		for(Renderable ro: renderables){
