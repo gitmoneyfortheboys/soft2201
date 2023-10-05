@@ -144,7 +144,11 @@ public class GameEngine {
 		}
 
 		for (Projectile projectile : projectiles) {
-			projectile.moveUp();
+			if (projectile.getType() == ProjectileType.PLAYER) {
+				projectile.moveUp();
+			} else if (projectile.getType() == ProjectileType.ENEMY) {
+				projectile.moveDown();
+			}
 		}
 
 		projectiles.removeIf(projectile -> projectile.getPosition().getY() <= 0);
