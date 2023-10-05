@@ -149,6 +149,18 @@ public class GameEngine {
 		projectiles.removeIf(projectile -> projectile.getPosition().getY() <= 0);
 		renderables.removeIf(renderable -> (renderable instanceof Projectile) && !projectiles.contains(renderable));
 
+		// Make enemies shoot periodically
+		for (GameObject gameObject : gameobjects) {
+			if (gameObject instanceof Enemy) {
+				Enemy enemy = (Enemy) gameObject;
+				if (Math.random() < 0.01) {  // Adjust this probability as needed
+					Projectile enemyProjectile = enemy.shoot();
+					projectiles.add(enemyProjectile);
+					renderables.add(enemyProjectile);
+				}
+			}
+		}
+
 		// Check for collisions between projectiles and bunkers
 		List<Projectile> projectilesToRemove = new ArrayList<>();
 		for (Projectile projectile : projectiles) {

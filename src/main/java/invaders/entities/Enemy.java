@@ -11,6 +11,8 @@ public class Enemy implements Renderable, GameObject {
     private Image image;
     private BoxCollider collider;  // Add this line
 
+    private EnemyProjectileFactory projectileFactory = new EnemyProjectileFactory();
+
     private Enemy() {
         // Private constructor to ensure instances are created only through the builder
     }
@@ -50,6 +52,12 @@ public class Enemy implements Renderable, GameObject {
     @Override
     public void update() {
         // Update logic for the enemy
+    }
+
+    public Projectile shoot() {
+        // Adjust the starting position of the projectile as needed
+        Vector2D projectilePosition = new Vector2D(position.getX() + getWidth() / 2, position.getY() + getHeight());
+        return projectileFactory.createProjectile(projectilePosition);
     }
 
     public BoxCollider getCollider() {
