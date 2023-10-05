@@ -55,10 +55,10 @@ public class Enemy implements Renderable, GameObject {
     }
 
     public Projectile shoot() {
-        // Adjust the starting position of the projectile as needed
-        Vector2D projectilePosition = new Vector2D(position.getX() + getWidth() / 2, position.getY() + getHeight());
+        // Adjust the starting position of the projectile to appear just below the enemy
+        Vector2D projectilePosition = new Vector2D(position.getX() + getWidth() / 2, position.getY() + getHeight() + 1);
         return projectileFactory.createProjectile(projectilePosition);
-    }
+    }    
 
     public BoxCollider getCollider() {
         if (collider == null) {

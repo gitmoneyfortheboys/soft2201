@@ -35,6 +35,11 @@ public class Projectile implements Renderable {
         return width;
     }
 
+    public void moveDown() {
+        this.position.setY(this.position.getY() + 5);  // Adjust the speed as needed
+    }
+    
+
     @Override
     public double getHeight() {
         return height;

@@ -153,13 +153,15 @@ public class GameEngine {
 		for (GameObject gameObject : gameobjects) {
 			if (gameObject instanceof Enemy) {
 				Enemy enemy = (Enemy) gameObject;
-				if (Math.random() < 0.01) {  // Adjust this probability as needed
+				if (Math.random() < 0.005) {  // Adjust this probability as needed
 					Projectile enemyProjectile = enemy.shoot();
+					enemyProjectile.moveDown();  // Make the enemy projectile move downwards
 					projectiles.add(enemyProjectile);
 					renderables.add(enemyProjectile);
 				}
 			}
 		}
+
 
 		// Check for collisions between projectiles and bunkers
 		List<Projectile> projectilesToRemove = new ArrayList<>();
