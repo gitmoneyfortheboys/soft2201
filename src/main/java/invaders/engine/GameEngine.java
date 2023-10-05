@@ -159,11 +159,13 @@ public class GameEngine {
 
 		renderables.removeIf(renderable -> (renderable instanceof Projectile) && !projectiles.contains(renderable));
 
+
 		// Make enemies shoot periodically
 		for (GameObject gameObject : gameobjects) {
 			if (gameObject instanceof Enemy) {
 				Enemy enemy = (Enemy) gameObject;
-				if (Math.random() < 0.005) {  // Adjust this probability as needed
+				long enemyProjectileCount = projectiles.stream().filter(p -> p.getType() == ProjectileType.ENEMY).count();
+				if (Math.random() < 0.001 && enemyProjectileCount < 3) {  // Adjust this probability as needed and check for enemy projectiles
 					Projectile enemyProjectile = enemy.shoot();
 					enemyProjectile.moveDown();  // Make the enemy projectile move downwards
 					projectiles.add(enemyProjectile);
@@ -171,6 +173,7 @@ public class GameEngine {
 				}
 			}
 		}
+
 
 
 		// Check for collisions between projectiles and bunkers

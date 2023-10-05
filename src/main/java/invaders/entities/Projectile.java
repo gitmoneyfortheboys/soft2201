@@ -49,7 +49,7 @@ public class Projectile implements Renderable {
     }
 
     public void moveDown() {
-        this.position.setY(this.position.getY() + 5);  // Adjust the speed as needed
+        this.position.setY(this.position.getY() + 1);  // Adjust the speed as needed
     }
     
 
