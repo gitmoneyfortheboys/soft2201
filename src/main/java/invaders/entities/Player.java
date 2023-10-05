@@ -1,6 +1,8 @@
 package invaders.entities;
 
 import invaders.logic.Damagable;
+import invaders.physics.BoxCollider;
+import invaders.physics.Collider;
 import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
 import invaders.rendering.Animator;
@@ -22,10 +24,15 @@ public class Player implements Moveable, Damagable, Renderable {
 
     private ProjectileFactory projectileFactory;
 
+    private int lives;
+
+    private BoxCollider collider;
+
     public Player(Vector2D position, ProjectileFactory factory){
         this.image = new Image(new File("src/main/resources/player.png").toURI().toString(), width, height, true, true);
         this.position = position;
         this.projectileFactory = factory;
+        this.collider = new BoxCollider(width, height, position);
     }
 
     @Override
@@ -93,5 +100,23 @@ public class Player implements Moveable, Damagable, Renderable {
     public Layer getLayer() {
         return Layer.FOREGROUND;
     }
+
+    // Inside the Player class
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public int getLives() {
+        return this.lives;
+    }
+
+    public void loseLife() {
+        this.lives--;
+    }
+
+    public Collider getCollider() {
+        return this.collider;
+    }
+
 
 }

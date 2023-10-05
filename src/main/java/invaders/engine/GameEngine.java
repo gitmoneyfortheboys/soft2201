@@ -43,6 +43,7 @@ public class GameEngine {
 	private double windowHeight;
 
 	private List<Projectile> projectiles = new ArrayList<>();
+	
 
 
 	public GameEngine(String configPath) {
@@ -64,6 +65,9 @@ public class GameEngine {
 			// Instantiate the Player with the PlayerProjectileFactory
 			player = new Player(new Vector2D(x, y), new PlayerProjectileFactory(new FastStraightBehavior()));
 			renderables.add(player);
+
+			Long playerLives = (Long) playerConfig.get("lives");
+			player.setLives(playerLives.intValue());
 
 			// Read the window size
 			JSONObject gameConfig = (JSONObject) jsonObject.get("Game");
@@ -241,6 +245,20 @@ public class GameEngine {
 		gameobjects.removeAll(enemiesToRemove);
 		renderables.removeAll(enemiesToRemove);
 
+		// Check collisions between enemy projectiles and player.
+		for (Projectile projectile : projectiles) {
+			if (projectile.getType() == ProjectileType.ENEMY && projectile.getCollider().isColliding(player.getCollider())) {
+				player.loseLife();
+				projectilesToRemove.add(projectile); // This line ensures the projectile is marked for removal
+				if (player.getLives() <= 0) {
+					// End the game
+					gameOver();
+				}
+				break; // Exit the loop once a collision is detected
+			}
+		}
+
+
 
 		// Check for collisions between bunkers and enemies
 		for (GameObject gameObject : gameobjects) {
@@ -308,4 +326,12 @@ public class GameEngine {
 	public double getWindowHeight() {
 		return windowHeight;
 	}
+
+	// Inside the GameEngine class
+	private void gameOver() {
+		System.out.println("Game Over - Out of Lives");
+		System.exit(0);
+	}
+
+
 }
